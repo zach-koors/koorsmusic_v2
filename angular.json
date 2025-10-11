@@ -27,10 +27,20 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/styles.scss"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -99,5 +109,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "5de65c84-a5da-4d44-a5ab-d068edc3defc"
   }
 }
