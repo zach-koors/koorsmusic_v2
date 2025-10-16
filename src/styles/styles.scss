@@ -57,11 +57,18 @@ a:active {
   font-weight: bold;
 }
 
+
 .nav-link:hover {
   color: white;
   background-color: colors.$secondary;
   border-left-color: white;
   cursor: pointer;
+}
+
+.active-link {
+  color: white;
+  background-color: colors.$secondary;
+  border-left-color: white;
 }
 
 .center {
@@ -113,16 +120,6 @@ hr {
   border-radius: .2em;
 }
 
-.red-banner {
-  box-sizing: border-box;
-  padding: .2em;
-  color: white;
-  font-weight: 500;
-  width: 100%;
-  background-color: colors.$secondary;
-  border-radius: .2em;
-}
-
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -162,4 +159,8 @@ footer {
   border-top: thin solid colors.$secondary;
   border-bottom: thin solid colors.$secondary;
   padding: .2em;
+}
+
+.underline {
+  border-bottom: thin solid colors.$secondary;
 }

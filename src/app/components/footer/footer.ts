@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TimeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
