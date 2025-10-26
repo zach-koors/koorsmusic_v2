@@ -12,8 +12,9 @@
     </a>
     .
 </p>
+
 <hr>
 
-<ng-container *ngFor="let song of songs">
-  <app-song [title]="song.title" [link]="song.link"></app-song>
-</ng-container>
+@for (song of songs; track song.title) {
+    <app-song [title]="song.title" [link]="song.link"></app-song>
+}
