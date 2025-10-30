@@ -1,4 +1,17 @@
-<!-- pic -->
 <div class="center">
-  <img src="/assets/images/kokozami/archives-full-cover.jpg" alt="kokozami cassette cover image">
+  @if (!isVideoPlaying) {
+    <img
+      src="/assets/images/kokozami/archives-full-cover.jpg"
+      alt="kokozami cassette cover image"
+      (click)="playVideo()"
+      [class.cooldown]="isCooldown"
+    />
+  } @else {
+    <video
+      src="/assets/images/kokozami/archives-full-cover-vid.mp4"
+      autoplay
+      (ended)="onVideoEnded()"
+      class="cover-video"
+    ></video>
+  }
 </div>

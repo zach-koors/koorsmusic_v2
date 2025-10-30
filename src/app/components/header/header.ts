@@ -7,5 +7,5 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class AppHeader {
+export class Header {
 }

@@ -2,10 +2,25 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-home',
-  imports: [],
   templateUrl: './home.html',
-  styleUrl: './home.scss'
+  styleUrls: ['./home.scss']
 })
 export class Home {
-  currentYear = new Date().getFullYear();
+  isVideoPlaying = false;
+  isCooldown = false;
+  private cooldownTime = 7777;
+
+  playVideo(): void {
+    if (this.isCooldown) return;
+    this.isVideoPlaying = true;
+  }
+
+  onVideoEnded(): void {
+    this.isVideoPlaying = false;
+    this.isCooldown = true;
+
+    setTimeout(() => {
+      this.isCooldown = false;
+    }, this.cooldownTime);
+  }
 }

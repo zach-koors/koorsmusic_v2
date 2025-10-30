@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TimeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
@@ -7,6 +6,6 @@ import { TimeInterval } from 'rxjs';
   templateUrl: './footer.html',
   styleUrl: './footer.scss'
 })
-export class AppFooter {
+export class Footer {
   currentYear = new Date().getFullYear();
 }
