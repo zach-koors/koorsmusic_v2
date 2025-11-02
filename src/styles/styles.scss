@@ -178,3 +178,37 @@ footer {
 .cooldown {
   pointer-events: none;
 }
+
+.media-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1.5; // keep layout height stable (adjust to your image/video ratio)
+  overflow: hidden;
+}
+
+.media-container img,
+.media-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.media-container img.hidden {
+  opacity: 0;
+}
+
+.cover-video {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cover-video.visible {
+  opacity: 1;
+}

@@ -1,17 +1,22 @@
-<div class="center">
+<div class="center media-container">
   @if (!isVideoPlaying) {
     <img
       src="/assets/images/kokozami/archives-full-cover.jpg"
       alt="kokozami cassette cover image"
       (click)="playVideo()"
       [class.cooldown]="isCooldown"
+      [class.hidden]="isVideoPlaying && isVideoReady"
     />
   } @else {
     <video
       src="/assets/images/kokozami/archives-full-cover-vid.mp4"
       autoplay
-      (ended)="onVideoEnded()"
       class="cover-video"
+      muted
+      playsinline
+      (loadeddata)="onVideoLoaded()"
+      (ended)="onVideoEnded()"
+      [class.visible]="isVideoReady"
     ></video>
   }
 </div>

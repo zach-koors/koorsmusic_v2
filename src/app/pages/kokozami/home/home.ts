@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,19 +8,23 @@ import { Component } from '@angular/core';
 export class Home {
   isVideoPlaying = false;
   isCooldown = false;
-  private cooldownTime = 7777;
+  isVideoReady = false;
+
+  private readonly cooldownTime = 5000; // ms
 
   playVideo(): void {
     if (this.isCooldown) return;
     this.isVideoPlaying = true;
+    this.isVideoReady = true;
+  }
+
+  onVideoLoaded(): void {
+    this.isVideoReady = true;
   }
 
   onVideoEnded(): void {
     this.isVideoPlaying = false;
     this.isCooldown = true;
-
-    setTimeout(() => {
-      this.isCooldown = false;
-    }, this.cooldownTime);
+    setTimeout(() => this.isCooldown = false, this.cooldownTime);
   }
 }
