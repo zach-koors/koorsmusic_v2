@@ -6,7 +6,6 @@ import { Component, Input } from '@angular/core';
   template: `
     <p>{{ title }}</p>
     <audio controls controlsList="nodownload" [src]="link"></audio>
-    <hr class="space">
   `,
   styleUrls: ['./song.scss']
 })
