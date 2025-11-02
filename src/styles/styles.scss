@@ -188,6 +188,12 @@ footer {
   overflow: hidden;
 }
 
+.inline-media-container {
+  width: 100%;
+  margin: auto;
+  border-radius: .5em;
+}
+
 .media-container img,
 .media-container video {
   position: absolute;
@@ -197,18 +203,9 @@ footer {
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  transition: opacity 0.3s ease;
-}
-
-.media-container img.hidden {
-  opacity: 0;
 }
 
 .cover-video {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.cover-video.visible {
   opacity: 1;
+  pointer-events: none;
 }

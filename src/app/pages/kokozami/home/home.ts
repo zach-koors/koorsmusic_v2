@@ -15,7 +15,7 @@ export class Home {
   playVideo(): void {
     if (this.isCooldown) return;
     this.isVideoPlaying = true;
-    this.isVideoReady = true;
+    this.isVideoReady = false;
   }
 
   onVideoLoaded(): void {
