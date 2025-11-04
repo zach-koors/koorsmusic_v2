@@ -10,7 +10,7 @@ export class Home {
   isCooldown = false;
   isVideoReady = false;
 
-  private readonly cooldownTime = 5000; // ms
+  private readonly cooldownTime = 3000; // ms
 
   playVideo(): void {
     if (this.isCooldown) return;

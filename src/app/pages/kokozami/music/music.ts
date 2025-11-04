@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Song } from './song';
 import { CommonModule } from '@angular/common';
+import { Video } from "../../../components/video/video";
 
 @Component({
   selector: 'app-music',
-  imports: [RouterModule, Song, CommonModule],
+  imports: [RouterModule, Song, CommonModule, Video],
   templateUrl: './music.html',
   styleUrl: './music.scss'
 })
