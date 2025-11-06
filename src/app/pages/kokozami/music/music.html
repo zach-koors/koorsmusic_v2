@@ -1,3 +1,4 @@
+<app-header></app-header>
 <app-video src="/assets/images/kokozami/fwd-drum-loop.mp4"></app-video>
 <p>
     since you're a friend, you can listen to a lot of the music i've made so far right here on my website. 
@@ -13,9 +14,8 @@
     </a>
     .
 </p>
-
 <hr>
-
 @for (song of songs; track song.title) {
     <app-song [title]="song.title" [link]="song.link"></app-song>
 }
+<app-footer></app-footer>

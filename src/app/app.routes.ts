@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/kokozami/home/home';
+import { KoorsMusic } from './pages/koors-music/koors-music';
 
 export const routes: Routes = [
+  { path: '', title: 'KoorsMusic', component: KoorsMusic },
   { path: 'kokozami', title: 'Home', component: Home },
   { path: 'kokozami/about', title: 'About',loadComponent: () => import('./pages/kokozami/about/about').then(m => m.About) },
   { path: 'kokozami/music', title: 'Music', loadComponent: () => import('./pages/kokozami/music/music').then(m => m.Music) },

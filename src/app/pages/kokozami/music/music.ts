@@ -3,10 +3,12 @@ import { RouterModule } from '@angular/router';
 import { Song } from './song';
 import { CommonModule } from '@angular/common';
 import { Video } from "../../../components/video/video";
+import { Header } from "../../../components/header/header";
+import { Footer } from "../../../components/footer/footer";
 
 @Component({
   selector: 'app-music',
-  imports: [RouterModule, Song, CommonModule, Video],
+  imports: [RouterModule, Song, CommonModule, Video, Header, Footer],
   templateUrl: './music.html',
   styleUrl: './music.scss'
 })
