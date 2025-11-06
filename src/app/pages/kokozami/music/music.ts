@@ -12,7 +12,7 @@ import { Video } from "../../../components/video/video";
 })
 export class Music {
   songs = [
-    { title: 'archives', link: 'https://dl.dropbox.com/scl/fi/jemy10uuf0bs9vm2iawsj/01-Archives.mp3?rlkey=oljupy5l4sf8y1yga5mu8zc2f&st=4iuw3kcx&dl=0' },
+    { title: 'archives', link: 'https://dl.dropbox.com/scl/fi/maofv24ummw2p7nfpk75b/01-Archives.mp3?rlkey=l4hz4mvz4lij8as0jf4uues7d&st=fxmv99ia&dl=0' },
     { title: 'listen to', link: 'https://dl.dropbox.com/scl/fi/rzecf2rkv4s4dxbmkxm8q/02-Listen-To.mp3?rlkey=ayly1qv55wjco5pjwtco49wl6&st=ppsqkbnk&dl=0' },
     { title: 'each eye jake', link: 'https://dl.dropbox.com/scl/fi/qr3t6g9m7g8a4s0mfhwzz/03-Each-Eye-Jake.mp3?rlkey=306saw4qii2mxuvvwanf5zhbz&st=ppnpypff&dl=0' },
     { title: 'impasse', link: 'https://dl.dropbox.com/scl/fi/lsysg9qclc8k4nvizrc1x/04-Impasse.mp3?rlkey=p2ru2je9aycyfadwkr0acjijl&st=mo4a050d&dl=0' },
