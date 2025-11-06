@@ -1,0 +1,51 @@
+#!/bin/bash
+# ---------------------------------------------------
+# gitquick.sh — Safe, all-in-one Git add + commit + push
+# Usage: ./gitquick.sh "your commit message"
+# ---------------------------------------------------
+
+set -euo pipefail
+
+# 🧠 Ensure we're inside a Git repository
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "❌ Error: Not inside a Git repository."
+  exit 1
+fi
+
+# 🧠 Ensure commit message provided
+if [ $# -eq 0 ]; then
+  echo "❌ Error: Commit message required."
+  echo "Usage: ./gitquick.sh \"your commit message\""
+  exit 1
+fi
+
+COMMIT_MSG="$*"
+
+echo "📦 Checking for changes..."
+
+# ✅ Detect untracked or modified files
+if git ls-files --others --exclude-standard --error-unmatch -- ':/*' >/dev/null 2>&1 \
+   || ! git diff --quiet \
+   || ! git diff --cached --quiet; then
+  echo "📋 Changes detected."
+else
+  echo "⚠️  No changes to commit."
+  exit 0
+fi
+
+echo "📦 Adding all changes..."
+git add .
+
+echo "📝 Committing with message: \"$COMMIT_MSG\""
+git commit -m "$COMMIT_MSG" || {
+  echo "⚠️  Nothing new to commit (maybe identical content)."
+  exit 0
+}
+
+# 🧭 Determine current branch
+CURRENT_BRANCH="$(git branch --show-current 2>/dev/null || echo 'main')"
+
+echo "🚀 Pushing to origin/$CURRENT_BRANCH..."
+git push -u origin "$CURRENT_BRANCH"
+
+echo "✅ All done!"
