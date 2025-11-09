@@ -13,6 +13,12 @@ import { Footer } from "../../../components/footer/footer";
   styleUrl: './music.scss'
 })
 export class Music {
+  randomSong: { title: string; link: string } | null = null;
+
+  ngOnInit() {
+    this.pickRandomSong();
+  }
+  
   songs = [
     { title: 'archives', link: 'https://dl.dropbox.com/scl/fi/maofv24ummw2p7nfpk75b/01-Archives.mp3?rlkey=l4hz4mvz4lij8as0jf4uues7d&st=fxmv99ia&dl=0' },
     { title: 'listen to', link: 'https://dl.dropbox.com/scl/fi/rzecf2rkv4s4dxbmkxm8q/02-Listen-To.mp3?rlkey=ayly1qv55wjco5pjwtco49wl6&st=ppsqkbnk&dl=0' },
@@ -22,4 +28,9 @@ export class Music {
     { title: 'no nope', link: 'https://dl.dropbox.com/scl/fi/ny3tmk9977hkyfffv4ywc/06-No-Nope.mp3?rlkey=tj20vfyuaxkvborhpumtcd6y6&st=mdom9i8j&dl=0' },
     { title: 'this singular', link: 'https://dl.dropbox.com/scl/fi/662icajh56qu5ntbg9ayf/07-This-Singular.mp3?rlkey=3ghac99o3cczcq3v41f8s17xc&st=0kycv4gt&dl=0' }
   ];
+
+  pickRandomSong() {
+    const randomIndex = Math.floor(Math.random() * (this.songs.length - 1)) + 1;
+    this.randomSong = this.songs[randomIndex];
+  }
 }

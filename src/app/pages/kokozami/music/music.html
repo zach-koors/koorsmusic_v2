@@ -15,7 +15,14 @@
     .
 </p>
 <hr>
-@for (song of songs; track song.title) {
-    <app-song [title]="song.title" [link]="song.link"></app-song>
+<app-song
+  [title]="songs[0].title"
+  [link]="songs[0].link">
+</app-song>
+@if (randomSong) {
+  <app-song
+    [title]="randomSong.title"
+    [link]="randomSong.link">
+  </app-song>
 }
 <app-footer></app-footer>
