@@ -20,9 +20,27 @@ body {
   }
 }
 
-@media (min-width: 75em) {
+@media (min-width: 70em) {
   body {
     width: 40%;
+  }
+}
+
+@media (min-width: 90em) {
+  body {
+    width: 30%;
+  }
+}
+
+@media (min-width: 110em) {
+  body {
+    width: 20%;
+  }
+}
+
+@media (min-width: 130em) {
+  body {
+    width: 15%;
   }
 }
 
