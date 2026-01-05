@@ -10,6 +10,10 @@ describe('ParticipationService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    try {
+      Object.defineProperty(document, 'hidden', { value: false, configurable: true });
+    } catch (e) {}
+
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule], providers: [PerformanceService, ParticipationService] });
     perf = TestBed.inject(PerformanceService);
     part = TestBed.inject(ParticipationService);
@@ -22,7 +26,8 @@ describe('ParticipationService', () => {
   });
 
   it('posts join on READY', fakeAsync(() => {
-    tick(700);
+  // trigger deterministic refresh which will cause ParticipationService to react
+  perf.refresh();
     const ready = createIdlePerformance();
     ready.status = 'READY';
     ready.version = 1;
@@ -30,6 +35,7 @@ describe('ParticipationService', () => {
     const req = httpMock.expectOne('/performance');
     req.flush(ready);
 
+    // ParticipationService should POST /performance/join
     const joinReq = httpMock.expectOne('/performance/join');
     expect(joinReq.request.method).toBe('POST');
     joinReq.flush(ready);

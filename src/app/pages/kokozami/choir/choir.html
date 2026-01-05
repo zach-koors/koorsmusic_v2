@@ -1,4 +1,15 @@
 <div class="choir-page">
-  <h1>Choir (WIP)</h1>
-  <p>This is a placeholder for the Choir feature. Services are implemented and will be wired into this UI in Phase 5.</p>
+  <div class="state-box">
+    <h1 class="state-text" [ngClass]="performance?.status">{{ performance?.status || 'IDLE' }}</h1>
+    <div *ngIf="performance?.status === 'READY'" class="counter">Participants: {{ performance?.participantCount }}</div>
+
+    <div *ngIf="isLeader && performance?.status === 'READY'" class="controls">
+      <button (click)="onStart()" [disabled]="buttonsDisabled">START</button>
+      <button (click)="onReset()" [disabled]="buttonsDisabled">RESET</button>
+    </div>
+
+    <canvas #vizCanvas class="viz" *ngIf="performance?.status === 'PLAYING'"></canvas>
+
+    <div *ngIf="performance?.status === 'FINISHED'" class="thank-you">THANK YOU</div>
+  </div>
 </div>

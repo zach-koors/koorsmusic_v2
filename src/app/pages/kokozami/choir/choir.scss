@@ -15,3 +15,52 @@
   color: white;
   background: black;
 }
+
+.state-box {
+  text-align: center;
+}
+
+.state-text {
+  font-size: 3rem;
+  margin: 0.5rem 0;
+}
+
+.state-text.IDLE {
+  color: white;
+}
+.state-text.READY {
+  color: cyan;
+}
+.state-text.PLAYING {
+  color: lightgreen;
+}
+.state-text.FINISHED {
+  color: white;
+}
+
+.counter {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+.controls {
+  margin-top: 1rem;
+}
+
+.controls button {
+  margin: 0 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+}
+
+.viz {
+  width: 2rem;
+  height: 18rem;
+  margin: 1rem auto 0;
+  background: black;
+}
+
+.thank-you {
+  font-size: 2rem;
+  margin-top: 1rem;
+}

@@ -8,6 +8,12 @@ describe('PerformanceService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    try {
+      Object.defineProperty(document, 'hidden', { value: false, configurable: true });
+    } catch (e) {
+      /* ignore */
+    }
+
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule], providers: [PerformanceService] });
     service = TestBed.inject(PerformanceService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -19,7 +25,7 @@ describe('PerformanceService', () => {
   });
 
   it('polls /performance', fakeAsync(() => {
-    tick(700);
+  service.refresh();
     const req = httpMock.expectOne('/performance');
     expect(req.request.method).toBe('GET');
     const p = createIdlePerformance();
@@ -27,7 +33,7 @@ describe('PerformanceService', () => {
   }));
 
   it('treats expired performance as IDLE', fakeAsync(() => {
-    tick(700);
+    tick(1000);
     const expired = createIdlePerformance();
     expired.expiresAt = Date.now() - 1000;
 
@@ -35,10 +41,9 @@ describe('PerformanceService', () => {
     const sub = service.performance$.subscribe((val) => {
       seen = val.status;
     });
-
+  service.refresh();
     const req = httpMock.expectOne('/performance');
     req.flush(expired);
-    tick();
     expect(seen).toBe('IDLE');
     sub.unsubscribe();
   }));

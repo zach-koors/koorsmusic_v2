@@ -36,6 +36,19 @@ export class PerformanceService implements OnDestroy {
       });
   }
 
+  // Public method to fetch and emit the current performance once (manual refresh)
+  refresh() {
+    if (typeof document !== 'undefined' && document.hidden) return;
+    this.http.get<Performance>('/performance').subscribe((p) => {
+      if (!p) return;
+      if (p.expiresAt && Date.now() > p.expiresAt) {
+        this._performance$.next(createIdlePerformance());
+      } else {
+        this._performance$.next(p);
+      }
+    }, (err) => console.warn('Performance refresh error', err));
+  }
+
   stopPolling() {
     this.pollSub?.unsubscribe();
     this.pollSub = null;
