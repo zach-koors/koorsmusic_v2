@@ -1,0 +1,17 @@
+.choir-page {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 2rem;
+  min-height: 100vh; /* full viewport height */
+  /* extend edge-to-edge regardless of body width constraints */
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: black;
+}
