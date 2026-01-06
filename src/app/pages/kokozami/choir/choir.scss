@@ -18,6 +18,10 @@
 
 .state-box {
   text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .state-text {
@@ -54,10 +58,12 @@
 }
 
 .viz {
-  width: 2rem;
-  height: 18rem;
+  width: 100%;
+  height: 40vh; /* large visual area */
+  max-height: 60vh;
   margin: 1rem auto 0;
   background: black;
+  display: block;
 }
 
 .audio-enable {

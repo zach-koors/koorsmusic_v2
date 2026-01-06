@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AudioService {
@@ -6,6 +7,9 @@ export class AudioService {
   private analyser: AnalyserNode | null = null;
   private buffers: AudioBuffer[] = [];
   private sources: AudioBufferSourceNode[] = [];
+  private endedSubject = new Subject<void>();
+  public readonly ended$ = this.endedSubject.asObservable();
+  private lastScheduledStartTimeMs: number | null = null;
 
   async ensureContext(): Promise<AudioContext> {
     if (!this.audioContext) {
@@ -34,30 +38,51 @@ export class AudioService {
     this.buffers = decoded;
   }
 
-  schedule(startTimeMs: number) {
-    if (!this.audioContext) return;
-    // stop any previous sources
+  async schedule(startTimeMs: number): Promise<void> {
+    // If we're already scheduled for this start time and sources exist, do nothing
+    if (this.lastScheduledStartTimeMs === startTimeMs && this.sources.length > 0) return;
+
+    // Ensure audio context exists (may initialize analyser)
+    if (!this.audioContext) {
+      try { await this.ensureContext(); } catch (e) { return; }
+    }
+
+    // stop any previous sources (we'll schedule fresh ones)
     this.stop();
 
     const now = Date.now();
     // Apply a small safety buffer to compensate for client-server clock skew / latency
     const SAFETY_BUFFER_MS = 200;
-  const offsetMs = Math.max(0, startTimeMs - now - SAFETY_BUFFER_MS);
-  // log scheduling info for debugging clock skew / latency
-  try { console.debug('Audio.schedule', { startTimeMs, now, SAFETY_BUFFER_MS, offsetMs }); } catch (e) { /* no-op */ }
+    const offsetMs = Math.max(0, startTimeMs - now - SAFETY_BUFFER_MS);
     const offsetSec = offsetMs / 1000;
-    const playTime = this.audioContext.currentTime + offsetSec;
+    const playTime = this.audioContext!.currentTime + offsetSec;
+
+    let remaining = 0;
+    let endedEmitted = false;
 
     for (const buf of this.buffers) {
-      const src = this.audioContext.createBufferSource();
+      const src = this.audioContext!.createBufferSource();
       src.buffer = buf;
-      const gain = this.audioContext.createGain();
+      const gain = this.audioContext!.createGain();
       src.connect(gain);
       if (this.analyser) gain.connect(this.analyser);
-      gain.connect(this.audioContext.destination);
-      src.start(playTime);
+      gain.connect(this.audioContext!.destination);
+      remaining++;
+      src.onended = () => {
+        try {
+          remaining--;
+          if (remaining <= 0 && !endedEmitted) {
+            endedEmitted = true;
+            this.endedSubject.next();
+          }
+        } catch (e) { /* ignore */ }
+      };
+      try { src.start(playTime); } catch (e) { /* ignore */ }
       this.sources.push(src);
     }
+
+    this.lastScheduledStartTimeMs = startTimeMs;
+    
   }
 
   stop() {
@@ -66,5 +91,6 @@ export class AudioService {
       try { s.disconnect(); } catch { /* ignore */ }
     }
     this.sources = [];
+    this.lastScheduledStartTimeMs = null;
   }
 }

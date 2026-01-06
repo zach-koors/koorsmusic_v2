@@ -23,6 +23,8 @@ export class Choir implements OnInit, OnDestroy {
   buttonsDisabled = false;
   private preloaded = false;
   audioEnabled = false;
+  localFinished = false;
+  private audioEndSub: Subscription | null = null;
 
   constructor(
     private perf: PerformanceService,
@@ -75,11 +77,46 @@ export class Choir implements OnInit, OnDestroy {
 
     // On PLAYING: schedule audio and start viz
     if (p.status === 'PLAYING') {
-      if (p.startTime) this.audio.schedule(p.startTime);
-      setTimeout(() => {
-        if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement);
-      }, 0);
+      // stop polling while we play locally
+      try { this.perf.stopPolling(); } catch (e) {}
+      this.localFinished = false;
+      if (p.startTime) {
+        const sched = this.audio.schedule(p.startTime);
+        // schedule may return a promise; if so, start viz after it resolves.
+        if (sched && typeof (sched as any).then === 'function') {
+          (sched as any).then(() => {
+            try { if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement); } catch (e) {}
+          }).catch(() => {
+            // fallback immediate start
+            try { if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement); } catch (e) {}
+          });
+        } else {
+          setTimeout(() => {
+            if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement);
+          }, 0);
+        }
+      } else {
+        setTimeout(() => {
+          if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement);
+        }, 0);
+      }
+
+      // subscribe to audio ended to show thank-you and resume polling
+      try {
+        this.audioEndSub?.unsubscribe();
+      } catch (e) {}
+      this.audioEndSub = this.audio.ended$.subscribe(() => {
+        // stop viz and show local finished UI
+        try { this.viz.stop(); } catch (e) {}
+        this.localFinished = true;
+        // refresh server state and resume polling
+        try { this.perf.refresh(true); } catch (e) {}
+        try { this.perf.resumePolling(); } catch (e) {}
+      });
     } else {
+      // not playing anymore; ensure any audio end subscription is cleared
+      try { this.audioEndSub?.unsubscribe(); } catch (e) {}
+      this.audioEndSub = null;
       this.viz.stop();
       if (p.status === 'IDLE') {
         this.preloaded = false;

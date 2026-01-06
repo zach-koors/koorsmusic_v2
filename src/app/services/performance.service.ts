@@ -103,6 +103,12 @@ export class PerformanceService implements OnDestroy {
     this.pollSub = null;
   }
 
+  // Resume normal polling immediately (used after local playback completes)
+  resumePolling() {
+    this.pollMs = this.POLL_MS;
+    this.startPolling();
+  }
+
   claim() {
     return this.postWithRetry('/performance/claim', {});
   }

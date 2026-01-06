@@ -3,7 +3,7 @@ import { Choir } from './choir';
 import { PerformanceService } from '../../../services/performance.service';
 import { RoleService } from '../../../services/role.service';
 import { VisualizationService } from '../../../services/visualization.service';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, Subject } from 'rxjs';
 import { AudioService } from '../../../services/audio.service';
 import { ParticipationService } from '../../../services/participation.service';
 
@@ -23,15 +23,21 @@ describe('Choir', () => {
       claim: jasmine.createSpy('claim').and.returnValue(of({ leaderId: 'L1' })),
       join: jasmine.createSpy('join').and.returnValue(of({})),
       start: jasmine.createSpy('start').and.returnValue(of({})),
-      reset: jasmine.createSpy('reset').and.returnValue(of({}))
+      reset: jasmine.createSpy('reset').and.returnValue(of({})),
+      stopPolling: jasmine.createSpy('stopPolling'),
+      refresh: jasmine.createSpy('refresh'),
+      resumePolling: jasmine.createSpy('resumePolling')
     };
 
     const audioMock = {
       preload: jasmine.createSpy('preload').and.returnValue(Promise.resolve()),
       schedule: jasmine.createSpy('schedule'),
       ensureContext: jasmine.createSpy('ensureContext').and.returnValue(Promise.resolve({ state: 'running' })),
-      getAnalyser: jasmine.createSpy('getAnalyser').and.returnValue(null)
+      getAnalyser: jasmine.createSpy('getAnalyser').and.returnValue(null),
+      endedSubject: new Subject<void>(),
+      ended$: null as any
     };
+    audioMock.ended$ = audioMock.endedSubject.asObservable();
 
     await TestBed.configureTestingModule({
       imports: [Choir],
@@ -114,5 +120,17 @@ describe('Choir', () => {
     expect(compiled.querySelector('.counter')).toBeFalsy();
     const audio: any = TestBed.inject(AudioService as any);
     expect(audio.schedule).toHaveBeenCalled();
+    // stop polling while playing and start viz
+    expect(perfMock.stopPolling).toHaveBeenCalled();
+    const viz: any = TestBed.inject(VisualizationService as any);
+    expect(viz.start).toHaveBeenCalled();
+
+    // simulate audio end
+    (audio as any).endedSubject.next();
+    tick();
+    expect(viz.stop).toHaveBeenCalled();
+    expect(component.localFinished).toBeTrue();
+    expect(perfMock.refresh).toHaveBeenCalledWith(true);
+    expect(perfMock.resumePolling).toHaveBeenCalled();
   }));
 });

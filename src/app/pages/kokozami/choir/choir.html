@@ -14,6 +14,6 @@
 
     <canvas #vizCanvas class="viz" *ngIf="performance?.status === 'PLAYING'"></canvas>
 
-    <div *ngIf="performance?.status === 'FINISHED'" class="thank-you">THANK YOU</div>
+  <div *ngIf="performance?.status === 'FINISHED' || localFinished" class="thank-you">THANK YOU</div>
   </div>
 </div>
