@@ -1,0 +1,12 @@
+<div class="reset-container">
+  <div *ngIf="status === 'pending'">Resetting performance…</div>
+  <div *ngIf="status === 'success'">Reset successful — returning to choir…</div>
+  <div *ngIf="status === 'error'">
+    <div>Reset failed: {{ errorMsg }}</div>
+    <button (click)="goBack()">Back</button>
+  </div>
+  <div *ngIf="status === 'idle'">
+    <div>No reset action in progress.</div>
+    <button (click)="doReset()">Reset now</button>
+  </div>
+</div>

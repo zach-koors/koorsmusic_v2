@@ -60,6 +60,18 @@
   background: black;
 }
 
+.audio-enable {
+  margin-top: 1rem;
+}
+
+.audio-enable button {
+  padding: 0.6rem 1.2rem;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.4rem;
+}
+
 .thank-you {
   font-size: 2rem;
   margin-top: 1rem;

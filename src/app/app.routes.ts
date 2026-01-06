@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: 'shows', title: 'Shows', loadComponent: () => import('./pages/kokozami/shows/shows').then(m => m.Shows) },
   { path: 'contact', title: 'Contact', loadComponent: () => import('./pages/kokozami/contact/contact').then(m => m.Contact) },
   { path: 'choir', title: 'Choir', loadComponent: () => import('./pages/kokozami/choir/choir').then(m => m.Choir) },
+  { path: 'choir/reset', title: 'Choir Reset', loadComponent: () => import('./pages/kokozami/choir/reset/reset').then(m => m.Reset) },
   { path: '**', redirectTo: '' } // Wildcard route for a 404 page can be added here
 ];

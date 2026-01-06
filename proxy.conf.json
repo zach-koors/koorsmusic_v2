@@ -1,0 +1,9 @@
+{
+  "/performance": {
+    "target": "https://j1d6emqagj.execute-api.us-east-1.amazonaws.com/dev",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "info",
+    "pathRewrite": { "^/performance": "/performance" }
+  }
+}

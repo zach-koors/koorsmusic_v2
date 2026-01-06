@@ -37,18 +37,24 @@ Implementation notes:
 
 Next UI wiring will happen in Phase 5.
 
-Phase 5 — Frontend: UI States & Controls
-- 5.1 Implement state mapping from `performance.status` to UI states (IDLE, READY, PLAYING, FINISHED)
-- 5.2 READY: show participant counter; leader sees START/RESET
-- 5.3 PLAYING: hide counter; show visualization only
-- 5.4 FINISHED: show THANK YOU; leader may RESET
+Phase 5 — Frontend: UI States & Controls (Completed)
+- [x] 5.1 Implement state mapping from `performance.status` to UI states (IDLE, READY, PLAYING, FINISHED)
+- [x] 5.2 READY: show participant counter; leader sees START/RESET
+- [x] 5.3 PLAYING: hide counter; show visualization only
+- [x] 5.4 FINISHED: show THANK YOU; leader may RESET
   - Leader controls visible when `isLeader && status === 'READY'`; disable buttons immediately on click
   - Participant counter visible to everyone during READY; hidden during PLAYING
 
-Phase 6 — Audio + Visualization
-- 6.1 Preload per-voice audio buffers from S3
-- 6.2 Schedule playback with `startTime` (target: start = now + 2000ms)
-- 6.3 Implement vertical-line waveform visualization
+Phase 6 — Audio + Visualization (in progress)
+- [ ] 6.1 Preload per-voice audio buffers from S3
+- [ ] 6.2 Schedule playback with `startTime` (target: start = now + 2000ms)
+- [ ] 6.3 Implement vertical-line waveform visualization
+ 
+Integration with dev API
+- PERF API base today: `https://j1d6emqagj.execute-api.us-east-1.amazonaws.com/dev` (you provided)
+- Implemented runtime config token `PERFORMANCE_API_BASE` that reads `window.__PERFORMANCE_API_BASE` when set
+- Added local dev proxy `proxy.conf.json` to forward `/performance` to your dev API; run `ng serve --proxy-config proxy.conf.json` to use it
+- Next: CDK should inject a small script into `index.html` setting `window.__PERFORMANCE_API_BASE` to the deployed API base so the SPA calls the correct origin without rebuilds
 
 Phase 7 — Polling, Timing & Failure Handling
 - 7.1 Poll interval: 500–1000ms; back off on hidden tabs
