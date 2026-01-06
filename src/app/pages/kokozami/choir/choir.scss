@@ -47,6 +47,13 @@
 }
 .state-text.FINISHED {
   color: white;
+  /* Position THANK YOU similar to PLAYING so it replaces it in the header */
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  z-index: 2;
 }
 
 .counter {
@@ -93,7 +100,4 @@
   border-radius: 0.4rem;
 }
 
-.thank-you {
-  font-size: 2rem;
-  margin-top: 1rem;
-}
+/* removed standalone THANK YOU block; message now replaces the header text */

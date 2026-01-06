@@ -1,6 +1,6 @@
 <div class="choir-page">
   <div class="state-box">
-    <h1 class="state-text" [ngClass]="performance?.status">{{ performance?.status || 'IDLE' }}</h1>
+  <h1 class="state-text" [ngClass]="localFinished ? 'FINISHED' : (performance?.status || 'IDLE')">{{ localFinished ? 'THANK YOU' : (performance?.status || 'IDLE') }}</h1>
     <div *ngIf="performance?.status === 'READY'" class="counter">Participants: {{ performance?.participantCount }}</div>
 
     <div *ngIf="!audioEnabled && performance?.status === 'READY'" class="audio-enable">
@@ -14,6 +14,6 @@
 
     <canvas #vizCanvas class="viz" *ngIf="performance?.status === 'PLAYING'"></canvas>
 
-  <div *ngIf="performance?.status === 'FINISHED' || localFinished" class="thank-you">THANK YOU</div>
+  
   </div>
 </div>

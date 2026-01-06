@@ -25,6 +25,8 @@ export class Choir implements OnInit, OnDestroy {
   audioEnabled = false;
   localFinished = false;
   private audioEndSub: Subscription | null = null;
+  private finishTimeout: any = null;
+  private readonly THANK_YOU_MS = 60_000; // show THANK YOU for 60s before resuming polling
   private audioStartSub: Subscription | null = null;
 
   constructor(
@@ -115,9 +117,16 @@ export class Choir implements OnInit, OnDestroy {
         // stop viz and show local finished UI
         try { this.viz.stop(); } catch (e) {}
         this.localFinished = true;
-        // refresh server state and resume polling
-        try { this.perf.refresh(true); } catch (e) {}
-        try { this.perf.resumePolling(); } catch (e) {}
+        // Delay refreshing/resuming polling so the THANK YOU message remains visible
+        // for a short period rather than immediately when playback ends.
+        try { if (this.finishTimeout) { clearTimeout(this.finishTimeout); this.finishTimeout = null; } } catch (e) {}
+        this.finishTimeout = setTimeout(() => {
+          try { this.perf.refresh(true); } catch (e) {}
+          try { this.perf.resumePolling(); } catch (e) {}
+          this.finishTimeout = null;
+          // allow the server state to control the UI after refresh
+          this.localFinished = false;
+        }, this.THANK_YOU_MS);
       });
     } else {
       // not playing anymore; ensure any audio end subscription is cleared
@@ -125,6 +134,8 @@ export class Choir implements OnInit, OnDestroy {
       this.audioEndSub = null;
       try { this.audioStartSub?.unsubscribe(); } catch (e) {}
       this.audioStartSub = null;
+      // clear any pending finish timeout when playback stops or changes
+      try { if (this.finishTimeout) { clearTimeout(this.finishTimeout); this.finishTimeout = null; } } catch (e) {}
       this.viz.stop();
       if (p.status === 'IDLE') {
         this.preloaded = false;
@@ -180,5 +191,6 @@ export class Choir implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe());
+    try { if (this.finishTimeout) { clearTimeout(this.finishTimeout); this.finishTimeout = null; } } catch (e) {}
   }
 }
