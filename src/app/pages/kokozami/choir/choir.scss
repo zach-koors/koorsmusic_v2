@@ -37,6 +37,13 @@
 }
 .state-text.PLAYING {
   color: lightgreen;
+  /* Move PLAYING state up near the top so it's more visible */
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  z-index: 2;
 }
 .state-text.FINISHED {
   color: white;
@@ -58,12 +65,20 @@
 }
 
 .viz {
-  width: 100%;
-  height: 40vh; /* large visual area */
-  max-height: 60vh;
-  margin: 1rem auto 0;
-  background: black;
+  /* Make the visualization a thin bar across the center of the viewport */
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100vw;
+  height: 6vh; /* modest height so baseline is subtle */
+  max-height: 120px;
+  margin: 0;
+  background: transparent; /* let page background show through */
   display: block;
+  pointer-events: none; /* don't intercept clicks */
+  z-index: 1;
 }
 
 .audio-enable {

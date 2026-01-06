@@ -9,6 +9,9 @@ export class AudioService {
   private sources: AudioBufferSourceNode[] = [];
   private endedSubject = new Subject<void>();
   public readonly ended$ = this.endedSubject.asObservable();
+  private startedSubject = new Subject<void>();
+  public readonly started$ = this.startedSubject.asObservable();
+  private startTimeout: any = null;
   private lastScheduledStartTimeMs: number | null = null;
 
   async ensureContext(): Promise<AudioContext> {
@@ -81,6 +84,27 @@ export class AudioService {
       this.sources.push(src);
     }
 
+    // Emit a "started" signal at the time audio actually begins playing locally.
+    // Use AudioContext time converted to ms and a timer; clear any previous timer.
+    try {
+      if (this.startTimeout) {
+        clearTimeout(this.startTimeout);
+        this.startTimeout = null;
+      }
+      const nowAudioTime = this.audioContext!.currentTime;
+      const msUntilStart = Math.max(0, Math.round((playTime - nowAudioTime) * 1000));
+      if (msUntilStart <= 20) {
+        // start essentially now
+        this.startedSubject.next();
+      } else {
+        this.startTimeout = setTimeout(() => {
+          try { this.startedSubject.next(); } finally { this.startTimeout = null; }
+        }, msUntilStart);
+      }
+    } catch (e) {
+      // ignore timer/scheduling errors
+    }
+
     this.lastScheduledStartTimeMs = startTimeMs;
     
   }
@@ -92,5 +116,9 @@ export class AudioService {
     }
     this.sources = [];
     this.lastScheduledStartTimeMs = null;
+    if (this.startTimeout) {
+      try { clearTimeout(this.startTimeout); } catch (e) { /* ignore */ }
+      this.startTimeout = null;
+    }
   }
 }

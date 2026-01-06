@@ -49,28 +49,44 @@ export class VisualizationService {
       this.rafId = requestAnimationFrame(this.loop);
       return;
     }
-    const width = this.canvas.width;
-    const height = this.canvas.height;
-    this.ctx.fillStyle = 'black';
-    this.ctx.fillRect(0, 0, width, height);
+    // Use CSS pixel dimensions so drawing aligns with layout and transforms
+    const width = this.canvas.clientWidth;
+    const height = this.canvas.clientHeight;
 
-    if (analyser) {
-      const data = new Uint8Array(analyser.fftSize);
-      analyser.getByteTimeDomainData(data);
-      this.ctx.strokeStyle = 'white';
-      this.ctx.lineWidth = 2;
-      this.ctx.beginPath();
-      const centerX = Math.floor(width / 2);
-      const step = Math.max(1, Math.floor(data.length / height));
-      for (let i = 0; i < height; i++) {
-        const idx = Math.floor((i / height) * data.length);
-        const v = (data[idx] - 128) / 128; // -1..1
-        const y = Math.floor((height / 2) - v * (height / 2));
-        if (i === 0) this.ctx.moveTo(centerX, y);
-        else this.ctx.lineTo(centerX - i * 1, y);
+  // clear previous frame (transparent background so canvas doesn't obscure page)
+  this.ctx.clearRect(0, 0, width, height);
+
+    // Draw a faint center baseline across the viewport
+    const yMid = height / 2;
+    this.ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    this.ctx.lineWidth = 1;
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, yMid + 0.5); // 0.5 for crisp 1px line on some devices
+    this.ctx.lineTo(width, yMid + 0.5);
+    this.ctx.stroke();
+
+    // Draw waveform across the width (left-to-right) with modest amplitude
+    const data = new Uint8Array(analyser.fftSize);
+    analyser.getByteTimeDomainData(data);
+    this.ctx.strokeStyle = 'white';
+    this.ctx.lineWidth = 2;
+    this.ctx.beginPath();
+  // Increase waveform amplitude to be more visible (3x larger)
+  const amp = Math.max(4, height * 0.18 * 3); // 3x amplitude
+    const step = Math.max(1, Math.floor(data.length / width));
+    let first = true;
+    for (let x = 0; x < width; x++) {
+      const idx = Math.min(data.length - 1, Math.floor((x / width) * data.length));
+      const v = (data[idx] - 128) / 128; // -1..1
+      const y = Math.floor(yMid - v * amp);
+      if (first) {
+        this.ctx.moveTo(x, y);
+        first = false;
+      } else {
+        this.ctx.lineTo(x, y);
       }
-      this.ctx.stroke();
     }
+    this.ctx.stroke();
 
     this.rafId = requestAnimationFrame(this.loop);
   };

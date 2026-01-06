@@ -25,6 +25,7 @@ export class Choir implements OnInit, OnDestroy {
   audioEnabled = false;
   localFinished = false;
   private audioEndSub: Subscription | null = null;
+  private audioStartSub: Subscription | null = null;
 
   constructor(
     private perf: PerformanceService,
@@ -80,6 +81,11 @@ export class Choir implements OnInit, OnDestroy {
       // stop polling while we play locally
       try { this.perf.stopPolling(); } catch (e) {}
       this.localFinished = false;
+      // Ensure we start visualization as soon as local audio actually starts.
+      try { this.audioStartSub?.unsubscribe(); } catch (e) {}
+      this.audioStartSub = this.audio.started$.subscribe(() => {
+        try { if (this.canvasRef) this.viz.start(this.canvasRef.nativeElement); } catch (e) {}
+      });
       if (p.startTime) {
         const sched = this.audio.schedule(p.startTime);
         // schedule may return a promise; if so, start viz after it resolves.
@@ -117,6 +123,8 @@ export class Choir implements OnInit, OnDestroy {
       // not playing anymore; ensure any audio end subscription is cleared
       try { this.audioEndSub?.unsubscribe(); } catch (e) {}
       this.audioEndSub = null;
+      try { this.audioStartSub?.unsubscribe(); } catch (e) {}
+      this.audioStartSub = null;
       this.viz.stop();
       if (p.status === 'IDLE') {
         this.preloaded = false;
