@@ -20,13 +20,15 @@ export class Music {
   }
   
   songs = [
-    { title: 'archives', link: 'https://dl.dropbox.com/scl/fi/maofv24ummw2p7nfpk75b/01-Archives.mp3?rlkey=l4hz4mvz4lij8as0jf4uues7d&st=fxmv99ia&dl=0' },
-    { title: 'listen to', link: 'https://dl.dropbox.com/scl/fi/rzecf2rkv4s4dxbmkxm8q/02-Listen-To.mp3?rlkey=ayly1qv55wjco5pjwtco49wl6&st=ppsqkbnk&dl=0' },
-    { title: 'each eye jake', link: 'https://dl.dropbox.com/scl/fi/qr3t6g9m7g8a4s0mfhwzz/03-Each-Eye-Jake.mp3?rlkey=306saw4qii2mxuvvwanf5zhbz&st=ppnpypff&dl=0' },
-    { title: 'impasse', link: 'https://dl.dropbox.com/scl/fi/lsysg9qclc8k4nvizrc1x/04-Impasse.mp3?rlkey=p2ru2je9aycyfadwkr0acjijl&st=mo4a050d&dl=0' },
-    { title: 'formalities', link: 'https://dl.dropbox.com/scl/fi/3ccmf4z4k3gvinl02rmyf/05-Formalities.mp3?rlkey=8g3vykixn9ajmh1nyzd21well&st=3rvd7u48&dl=0' },
-    { title: 'no nope', link: 'https://dl.dropbox.com/scl/fi/ny3tmk9977hkyfffv4ywc/06-No-Nope.mp3?rlkey=tj20vfyuaxkvborhpumtcd6y6&st=mdom9i8j&dl=0' },
-    { title: 'this singular', link: 'https://dl.dropbox.com/scl/fi/662icajh56qu5ntbg9ayf/07-This-Singular.mp3?rlkey=3ghac99o3cczcq3v41f8s17xc&st=0kycv4gt&dl=0' }
+    { title: 'archives', link: 'https://dl.dropbox.com/scl/fi/ywjfz2l8bn9jwqpa68s8m/01-Archives.m4a?rlkey=jhkycqaufl5k0h6rfnqo7joxs&dl=0' },
+    { title: 'listen to', link: 'https://dl.dropbox.com/scl/fi/b2t57v8hdlmruh9zjf3vx/04-Listen-To.m4a?rlkey=m6h2it4a7kmdjkgksm2pguzsk&dl=0' },
+    { title: 'each eye jake', link: 'https://dl.dropbox.com/scl/fi/p562wt5717kyvlosi97jk/02-Each-Eye-Jake.m4a?rlkey=ndqnpkjz16o4srnt4pdei13hz&dl=0' },
+    { title: 'impasse', link: 'https://dl.dropbox.com/scl/fi/kr7ybz890va3o3sopct22/03-Impasse.m4a?rlkey=t6ktnstdw879f95hkha2yy7xf&dl=0' },
+    { title: 'formalities', link: 'https://dl.dropbox.com/scl/fi/hp9gbtzmev3r4d1u7ppmm/05-Formalities.m4a?rlkey=kxakqaekb5afboak51sxvue94&dl=0' },
+    { title: 'no nope', link: 'https://dl.dropbox.com/scl/fi/uig5zf1kzn65oxawb89qa/06-No-Nope.m4a?rlkey=ybvy7bm6g1k9o03srrgtk8hv1&dl=0' },
+    { title: 'this singular', link: 'https://dl.dropbox.com/scl/fi/d3lbd7c9032obmzgx3w5j/07-This-Singular.m4a?rlkey=wu4ue5ywn0d76b0i2epqd2shf&dl=0' },
+    { title: 'each eye jake (alt. version)', link: 'https://dl.dropbox.com/scl/fi/ztws4q1n9db0jsxe1sao6/08-Each-Eye-Jake-alternate-version.m4a?rlkey=25b8vyle7gx75cwjnrgqytrji&dl=0' }
+
   ];
 
   pickRandomSong() {
