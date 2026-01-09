@@ -1,3 +1,5 @@
+@use '../../../../styles/colors';
+
 .choir-page {
   box-sizing: border-box;
   margin: 0;
@@ -118,7 +120,7 @@
 .modal-content h2 {
   margin: 0 0 1rem 0;
   font-size: 1.8rem;
-  color: cyan;
+  color: colors.$secondary;
 }
 
 .modal-content p {
@@ -131,8 +133,8 @@
   padding: 1rem 2rem;
   font-size: 1.2rem;
   font-weight: bold;
-  background: rgb(0, 200, 200);
-  color: black;
+  background: colors.$secondary;
+  color: white;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -140,7 +142,8 @@
 }
 
 .modal-content button:hover {
-  background: rgb(0, 255, 255);
+  background: colors.$secondary;
+  filter: brightness(1.15);
   transform: scale(1.05);
 }
 
