@@ -39,7 +39,8 @@ export class Choir implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(this.perf.performance$.subscribe((p) => this.onPerformance(p)));
-    try { this.audioEnabled = !!localStorage.getItem('choir:audioEnabled'); } catch (e) { this.audioEnabled = false; }
+    // Always start with audioEnabled = false to force user gesture on each visit
+    this.audioEnabled = false;
   }
 
   private onPerformance(p: any) {
@@ -177,7 +178,8 @@ export class Choir implements OnInit, OnDestroy {
     }
 
     this.audioEnabled = true;
-    try { localStorage.setItem('choir:audioEnabled', '1'); } catch (e) { /* ignore */ }
+    // Do not persist audioEnabled preference - reset on every reload
+    // try { localStorage.setItem('choir:audioEnabled', '1'); } catch (e) { /* ignore */ }
   }
 
   onReset() {

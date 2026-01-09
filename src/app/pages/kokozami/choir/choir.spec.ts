@@ -35,9 +35,12 @@ describe('Choir', () => {
       ensureContext: jasmine.createSpy('ensureContext').and.returnValue(Promise.resolve({ state: 'running' })),
       getAnalyser: jasmine.createSpy('getAnalyser').and.returnValue(null),
       endedSubject: new Subject<void>(),
-      ended$: null as any
+      ended$: null as any,
+      startedSubject: new Subject<void>(),
+      started$: null as any
     };
     audioMock.ended$ = audioMock.endedSubject.asObservable();
+    audioMock.started$ = audioMock.startedSubject.asObservable();
 
     await TestBed.configureTestingModule({
       imports: [Choir],
@@ -96,19 +99,19 @@ describe('Choir', () => {
   }));
 
   it('enables audio when user taps the enable button', fakeAsync(() => {
-    // ensure no persisted flag
-    try { localStorage.removeItem('choir:audioEnabled'); } catch (e) {}
+    // audioEnabled should always be false initially (no localStorage persistence)
     perf$.next({ status: 'READY', participantCount: 0 });
     fixture.detectChanges();
     tick();
     const compiled = fixture.nativeElement as HTMLElement;
-    const btn = compiled.querySelector('.audio-enable button') as HTMLButtonElement;
+    const btn = compiled.querySelector('.audio-enable-modal button') as HTMLButtonElement;
     expect(btn).toBeTruthy();
     btn.click();
     tick();
     const audio: any = TestBed.inject(AudioService as any);
     expect(audio.ensureContext).toHaveBeenCalled();
-    expect(localStorage.getItem('choir:audioEnabled')).toBe('1');
+    // localStorage should NOT be set anymore
+    expect(localStorage.getItem('choir:audioEnabled')).toBeNull();
   }));
 
   it('shows canvas and hides counter when PLAYING', fakeAsync(() => {
@@ -130,6 +133,8 @@ describe('Choir', () => {
     tick();
     expect(viz.stop).toHaveBeenCalled();
     expect(component.localFinished).toBeTrue();
+    // Advance time past the THANK_YOU_MS delay (60000ms)
+    tick(60000);
     expect(perfMock.refresh).toHaveBeenCalledWith(true);
     expect(perfMock.resumePolling).toHaveBeenCalled();
   }));
