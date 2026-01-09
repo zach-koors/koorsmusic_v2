@@ -3,8 +3,12 @@
   <h1 class="state-text" [ngClass]="localFinished ? 'FINISHED' : (performance?.status || 'IDLE')">{{ localFinished ? 'THANK YOU' : (performance?.status || 'IDLE') }}</h1>
     <div *ngIf="performance?.status === 'READY'" class="counter">Participants: {{ performance?.participantCount }}</div>
 
-    <div *ngIf="!audioEnabled && performance?.status === 'READY'" class="audio-enable">
-      <button (click)="enableAudio()">Tap to enable audio</button>
+    <div *ngIf="!audioEnabled && performance?.status === 'READY'" class="audio-enable-modal">
+      <div class="modal-content">
+        <h2>Audio Required</h2>
+        <p>Tap below to enable audio for the performance</p>
+        <button (click)="enableAudio()">Enable Audio</button>
+      </div>
     </div>
 
     <div *ngIf="isLeader && performance?.status === 'READY'" class="controls">

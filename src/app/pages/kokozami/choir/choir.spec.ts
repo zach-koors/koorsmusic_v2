@@ -102,13 +102,14 @@ describe('Choir', () => {
     fixture.detectChanges();
     tick();
     const compiled = fixture.nativeElement as HTMLElement;
-    const btn = compiled.querySelector('.audio-enable button') as HTMLButtonElement;
+    const btn = compiled.querySelector('.audio-enable-modal button') as HTMLButtonElement;
     expect(btn).toBeTruthy();
     btn.click();
     tick();
     const audio: any = TestBed.inject(AudioService as any);
     expect(audio.ensureContext).toHaveBeenCalled();
-    expect(localStorage.getItem('choir:audioEnabled')).toBe('1');
+    // No longer persisting to localStorage
+    expect(localStorage.getItem('choir:audioEnabled')).toBeNull();
   }));
 
   it('shows canvas and hides counter when PLAYING', fakeAsync(() => {
