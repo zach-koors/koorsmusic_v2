@@ -94,7 +94,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.75);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -138,6 +138,11 @@
 .modal-content button:hover {
   background: #00e5e5;
   transform: scale(1.05);
+}
+
+.modal-content button:focus-visible {
+  outline: 2px solid cyan;
+  outline-offset: 2px;
 }
 
 .modal-content button:active {
