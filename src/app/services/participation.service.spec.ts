@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { PerformanceService } from './performance.service';
 import { ParticipationService } from './participation.service';
 import { createIdlePerformance } from '../models/performance';
+import { VoicePart } from '../models/voice-part';
 import { PERFORMANCE_API_BASE } from '../config/api.tokens';
 
 describe('ParticipationService', () => {
@@ -107,5 +108,100 @@ describe('ParticipationService', () => {
   // ensure we did not issue another join for the new version (no additional posts)
   const moreJoins = httpMock.match('/performance/join');
   expect(moreJoins.length).toBe(0);
+  }));
+
+  it('emits server and assigned voice parts on successful join', fakeAsync(() => {
+    perf.refresh();
+    const ready = createIdlePerformance();
+    ready.status = 'READY';
+    ready.version = 3;
+    const req = httpMock.expectOne('/performance');
+    req.flush(ready);
+
+    const joinReq = httpMock.expectOne('/performance/join');
+
+    let serverVal: VoicePart | null | undefined;
+    let assignedVal: VoicePart | undefined;
+    part.serverVoicePart$.subscribe(v => serverVal = v);
+    part.assignedVoicePart$.subscribe(v => assignedVal = v);
+
+    spyOn(console, 'log');
+    joinReq.flush({ ...ready, version: 4, participantCount: 1, voicePart: 'A' });
+
+  // The service triggers an immediate refresh(true) after join; flush that GET
+  const req2 = httpMock.expectOne('/performance');
+  req2.flush({ ...ready, version: 4, participantCount: 1 });
+
+    // server voicePart should be 'A' and assigned should be 'A'
+    expect(serverVal).toBe('A');
+    expect(assignedVal).toBe('A');
+    // log should include returned key
+    expect((console.log as any).calls.allArgs().some((a: any[]) => a[0] === 'performance/join returned voicePart:' && a[1] === 'A')).toBeTrue();
+  }));
+
+  it('falls back to S when server returns null and logs', fakeAsync(() => {
+    perf.refresh();
+    const ready = createIdlePerformance();
+    ready.status = 'READY';
+    ready.version = 6;
+    const req = httpMock.expectOne('/performance');
+    req.flush(ready);
+
+    const joinReq = httpMock.expectOne('/performance/join');
+    let serverVal: VoicePart | null | undefined;
+    let assignedVal: VoicePart | undefined;
+    part.serverVoicePart$.subscribe(v => serverVal = v);
+    part.assignedVoicePart$.subscribe(v => assignedVal = v);
+
+    spyOn(console, 'warn');
+    joinReq.flush({ ...ready, version: 7, participantCount: 1, voicePart: null });
+
+  // The service triggers an immediate refresh(true) after join; flush that GET
+  const req2b = httpMock.expectOne('/performance');
+  req2b.flush({ ...ready, version: 7, participantCount: 1 });
+
+    expect(serverVal).toBeNull();
+    expect(assignedVal).toBe('S');
+    expect((console.warn as any).calls.allArgs().some((a: any[]) => a[0].toString().indexOf('falling back to S') >= 0)).toBeTrue();
+  }));
+
+  it('falls back to S on join error and logs', fakeAsync(() => {
+    perf.refresh();
+    const ready = createIdlePerformance();
+    ready.status = 'READY';
+    ready.version = 8;
+    const req = httpMock.expectOne('/performance');
+    req.flush(ready);
+
+    const joinReq = httpMock.expectOne('/performance/join');
+    let serverVal: VoicePart | null | undefined;
+    let assignedVal: VoicePart | undefined;
+    part.serverVoicePart$.subscribe(v => serverVal = v);
+    part.assignedVoicePart$.subscribe(v => assignedVal = v);
+
+    spyOn(console, 'warn');
+    // Simulate server error responses and allow retry logic to run (postWithRetry retries up to 3 attempts)
+    joinReq.flush({}, { status: 500, statusText: 'Server Error' });
+    // First backoff: 200ms
+    tick(200);
+    const retry1 = httpMock.expectOne('/performance/join');
+    retry1.flush({}, { status: 500, statusText: 'Server Error' });
+    // Second backoff: 400ms
+    tick(400);
+    const retry2 = httpMock.expectOne('/performance/join');
+    retry2.flush({}, { status: 500, statusText: 'Server Error' });
+    // After exhausting retries, the error handler should have fired
+    tick(800);
+
+    // If any follow-up performance GETs were triggered, flush them to avoid open requests
+    const pendingPerf = httpMock.match('/performance');
+    pendingPerf.forEach(r => r.flush({ ...ready }));
+
+    expect(serverVal).toBeNull();
+    expect(assignedVal).toBe('S');
+    // Be robust about console.warn args: check any call arg contains the substring
+    const warnCalls = (console.warn as any).calls.allArgs();
+    const foundWarn = warnCalls.some((args: any[]) => args.some(a => String(a).indexOf('falling back to S') >= 0));
+    expect(foundWarn).toBeTrue();
   }));
 });

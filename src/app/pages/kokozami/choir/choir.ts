@@ -5,6 +5,7 @@ import { PerformanceService } from '../../../services/performance.service';
 import { RoleService } from '../../../services/role.service';
 import { AudioService } from '../../../services/audio.service';
 import { ParticipationService } from '../../../services/participation.service';
+import { VoicePart, VOICE_PART_LABEL, VOICE_PART_NAME } from '../../../models/voice-part';
 import { VisualizationService } from '../../../services/visualization.service';
 
 @Component({
@@ -22,6 +23,9 @@ export class Choir implements OnInit, OnDestroy {
   claiming = false;
   buttonsDisabled = false;
   private preloaded = false;
+  private preloadedPart: VoicePart | null = null;
+  currentAssignedPart: VoicePart | null = null;
+  readonly VOICE_PART_LABEL = VOICE_PART_LABEL;
   audioEnabled = false;
   localFinished = false;
   private audioEndSub: Subscription | null = null;
@@ -41,6 +45,21 @@ export class Choir implements OnInit, OnDestroy {
     this.subs.push(this.perf.performance$.subscribe((p) => this.onPerformance(p)));
     // Always initialize audioEnabled to false to force user gesture every visit
     this.audioEnabled = false;
+    // Subscribe to assigned voice part and preload the appropriate audio
+    try {
+      this.subs.push(this.participation.assignedVoicePart$.subscribe((part: VoicePart) => {
+        try { this.currentAssignedPart = part; } catch (e) {}
+        try {
+          if (!part) return;
+          // Preload only when we haven't already for this part
+          if (this.preloadedPart === part) return;
+          const url = encodeURI(`/assets/audio/${part}.mp3`);
+          this.audio.preload([url]).catch(() => { /* ignore preload errors */ });
+          this.preloadedPart = part;
+          this.preloaded = true;
+        } catch (e) { /* ignore */ }
+      }));
+    } catch (e) {}
   }
 
   private onPerformance(p: any) {
@@ -66,17 +85,9 @@ export class Choir implements OnInit, OnDestroy {
 
     // On READY: preload audio
     if (p.status === 'READY') {
-      // Let participation service attempt join immediately for late-arriving clients
-      if (!this.isLeader) {
-        try { this.participation.joinForPerformance(p); } catch (e) { /* ignore */ }
-      }
-      if (!this.preloaded) {
-        const url = encodeURI('/assets/audio/gold rush.mp3');
-        this.audio.preload([url]).catch(() => {
-          // ignore preload errors for now
-        });
-        this.preloaded = true;
-      }
+      // Let participation service attempt join immediately for late-arriving clients (leaders included)
+      try { this.participation.joinForPerformance(p); } catch (e) { /* ignore */ }
+      // Preloading handled by assignedVoicePart$ subscription
     }
 
     // On PLAYING: schedule audio and start viz
@@ -140,12 +151,25 @@ export class Choir implements OnInit, OnDestroy {
       this.viz.stop();
       if (p.status === 'IDLE') {
         this.preloaded = false;
+        this.preloadedPart = null;
       }
     }
   }
 
   get isLeader() {
     return this.role.isLeader(this.performance?.leaderId ?? null);
+  }
+
+  get headerText() {
+    if (this.localFinished) return 'THANK YOU';
+    const status = this.performance?.status || 'IDLE';
+    // Keep headerText generic; PLAYING label is shown in template with part on next line
+    return status;
+  }
+
+  get assignedPartName() {
+    const part: VoicePart = this.currentAssignedPart || 'S';
+    return VOICE_PART_NAME[part] || VOICE_PART_NAME['S'];
   }
 
   async onStart() {

@@ -46,6 +46,16 @@
   transform: translateX(-50%);
   font-size: 2rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.state-text .part-name {
+  display: block;
+  font-size: 1.1rem;
+  margin-top: 0.25rem;
+  letter-spacing: 0.06rem;
 }
 .state-text.FINISHED {
   color: white;
@@ -74,15 +84,15 @@
 }
 
 .viz {
-  /* Make the visualization a thin bar across the center of the viewport */
+  /* Make the visualization a tall waveform that spans much of the viewport */
   position: fixed;
   left: 0;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 100vw;
-  height: 6vh; /* modest height so baseline is subtle */
-  max-height: 120px;
+  height: 30vh; /* half as tall as previous 60vh */
+  max-height: 800px;
   margin: 0;
   background: transparent; /* let page background show through */
   display: block;

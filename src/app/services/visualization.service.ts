@@ -65,20 +65,23 @@ export class VisualizationService {
     this.ctx.lineTo(width, yMid + 0.5);
     this.ctx.stroke();
 
-    // Draw waveform across the width (left-to-right) with modest amplitude
+    // Draw waveform across the width (left-to-right) with amplitude scaled for taller canvas
     const data = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(data);
     this.ctx.strokeStyle = 'white';
     this.ctx.lineWidth = 2;
     this.ctx.beginPath();
-  // Increase waveform amplitude to be more visible (3x larger)
-  const amp = Math.max(4, height * 0.18 * 3); // 3x amplitude
+    // Use an amplitude that stays within the canvas bounds (<= half the height)
+    const amp = Math.max(4, Math.min(height * 0.45, height / 2));
     const step = Math.max(1, Math.floor(data.length / width));
     let first = true;
     for (let x = 0; x < width; x++) {
       const idx = Math.min(data.length - 1, Math.floor((x / width) * data.length));
       const v = (data[idx] - 128) / 128; // -1..1
-      const y = Math.floor(yMid - v * amp);
+      let y = Math.floor(yMid - v * amp);
+      // Clamp y to canvas vertical bounds to avoid drawing outside the canvas
+      if (y < 0) y = 0;
+      if (y > height) y = height;
       if (first) {
         this.ctx.moveTo(x, y);
         first = false;

@@ -1,6 +1,13 @@
 <div class="choir-page">
   <div class="state-box">
-  <h1 class="state-text" [ngClass]="localFinished ? 'FINISHED' : (performance?.status || 'IDLE')">{{ localFinished ? 'THANK YOU' : (performance?.status || 'IDLE') }}</h1>
+  <h1 class="state-text" [ngClass]="localFinished ? 'FINISHED' : (performance?.status || 'IDLE')">
+    <ng-container *ngIf="localFinished">THANK YOU</ng-container>
+    <ng-container *ngIf="!localFinished && performance?.status === 'PLAYING'">
+      PLAYING
+      <span class="part-name">{{ assignedPartName }}</span>
+    </ng-container>
+    <ng-container *ngIf="!localFinished && performance?.status !== 'PLAYING'">{{ performance?.status || 'IDLE' }}</ng-container>
+  </h1>
     <div *ngIf="performance?.status === 'READY'" class="counter">Participants: {{ performance?.participantCount }}</div>
 
     <div *ngIf="!audioEnabled && performance?.status === 'READY'" class="audio-enable-modal">
@@ -17,6 +24,7 @@
     </div>
 
     <canvas #vizCanvas class="viz" *ngIf="performance?.status === 'PLAYING'"></canvas>
+    <!-- Part indicator moved into headerText -->
 
   
   </div>

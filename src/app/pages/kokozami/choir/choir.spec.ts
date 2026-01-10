@@ -35,9 +35,17 @@ describe('Choir', () => {
       ensureContext: jasmine.createSpy('ensureContext').and.returnValue(Promise.resolve({ state: 'running' })),
       getAnalyser: jasmine.createSpy('getAnalyser').and.returnValue(null),
       endedSubject: new Subject<void>(),
+      startedSubject: new Subject<void>(),
+      started$: null as any,
       ended$: null as any
     };
     audioMock.ended$ = audioMock.endedSubject.asObservable();
+    audioMock.started$ = audioMock.startedSubject.asObservable();
+
+    const partMock = {
+      assignedVoicePart$: new BehaviorSubject<any>('S'),
+      joinForPerformance: jasmine.createSpy('joinForPerformance')
+    };
 
     await TestBed.configureTestingModule({
       imports: [Choir],
@@ -45,7 +53,8 @@ describe('Choir', () => {
         { provide: PerformanceService, useValue: perfMock },
         RoleService,
         { provide: VisualizationService, useValue: { start: jasmine.createSpy('start'), stop: jasmine.createSpy('stop') } },
-        { provide: AudioService, useValue: audioMock }
+  { provide: AudioService, useValue: audioMock },
+  { provide: ParticipationService, useValue: partMock }
       ]
     }).compileComponents();
 
@@ -88,7 +97,6 @@ describe('Choir', () => {
 
   it('late-arriving client triggers join when READY', fakeAsync(() => {
     const part = TestBed.inject(ParticipationService as any) as any;
-    spyOn(part, 'joinForPerformance').and.callThrough();
     perf$.next({ status: 'READY', participantCount: 1, version: 2 });
     fixture.detectChanges();
     tick();
@@ -112,6 +120,29 @@ describe('Choir', () => {
     expect(localStorage.getItem('choir:audioEnabled')).toBeNull();
   }));
 
+  it('preloads assigned voice part audio when assignedVoicePart emits', fakeAsync(() => {
+    const part: any = TestBed.inject(ParticipationService as any);
+    const audio: any = TestBed.inject(AudioService as any);
+    // simulate assignment to B
+    part.assignedVoicePart$.next('B');
+    tick();
+    expect(audio.preload).toHaveBeenCalledWith([encodeURI('/assets/audio/B.mp3')]);
+  }));
+
+  it('shows part indicator during PLAYING', fakeAsync(() => {
+    const part: any = TestBed.inject(ParticipationService as any);
+    part.assignedVoicePart$.next('A');
+    perf$.next({ status: 'PLAYING', startTime: Date.now() + 2000 });
+    fixture.detectChanges();
+    tick();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const headerEl = compiled.querySelector('.state-text') as HTMLElement;
+    expect(headerEl).toBeTruthy();
+    expect(headerEl.textContent).toContain('PLAYING');
+    const partSpan = headerEl.querySelector('.part-name');
+    expect(partSpan?.textContent).toContain('ALTO');
+  }));
+
   it('shows canvas and hides counter when PLAYING', fakeAsync(() => {
     perf$.next({ status: 'PLAYING', startTime: Date.now() + 2000 });
     fixture.detectChanges();
@@ -128,9 +159,13 @@ describe('Choir', () => {
 
     // simulate audio end
     (audio as any).endedSubject.next();
-    tick();
-    expect(viz.stop).toHaveBeenCalled();
+    // localFinished should be true immediately after audio end
     expect(component.localFinished).toBeTrue();
+    // advance the THANK_YOU delay so refresh/resumePolling are invoked
+    tick(60_000);
+    expect(viz.stop).toHaveBeenCalled();
+    // after the delay the THANK YOU message is hidden again
+    expect(component.localFinished).toBeFalse();
     expect(perfMock.refresh).toHaveBeenCalledWith(true);
     expect(perfMock.resumePolling).toHaveBeenCalled();
   }));
