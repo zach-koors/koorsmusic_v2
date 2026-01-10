@@ -150,6 +150,7 @@ export class Choir implements OnInit, OnDestroy {
       try { if (this.finishTimeout) { clearTimeout(this.finishTimeout); this.finishTimeout = null; } } catch (e) {}
       this.viz.stop();
       if (p.status === 'IDLE') {
+        this.role.setLeaderId(null);
         this.preloaded = false;
         this.preloadedPart = null;
       }
