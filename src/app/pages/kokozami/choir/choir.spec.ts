@@ -169,4 +169,19 @@ describe('Choir', () => {
     expect(perfMock.refresh).toHaveBeenCalledWith(true);
     expect(perfMock.resumePolling).toHaveBeenCalled();
   }));
+
+  it('clears stale leaderId when performance transitions to IDLE', fakeAsync(() => {
+    const role = TestBed.inject(RoleService);
+    // simulate that we have a leaderId saved from a previous session
+    role.setLeaderId('L1');
+    expect(role.leaderId).toBe('L1');
+
+    // now the performance has expired and returns to IDLE
+    perf$.next({ status: 'IDLE' });
+    fixture.detectChanges();
+    tick();
+
+    // leaderId should be cleared to allow reclaiming leadership
+    expect(role.leaderId).toBeNull();
+  }));
 });
