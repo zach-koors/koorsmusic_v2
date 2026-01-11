@@ -44,7 +44,7 @@ export class AudioService {
       const audio = new Audio();
       audio.src = url;
       audio.preload = 'auto';
-      // playsInline is critical for iOS to respect playback
+      // playsinline is critical for iOS to respect playback
       audio.setAttribute('playsinline', '');
       audio.setAttribute('webkit-playsinline', '');
       return audio;
@@ -102,9 +102,9 @@ export class AudioService {
           this.analyser.connect(this.audioContext.destination);
           this.mediaElementSources.push(source);
         } catch (e) {
-          // If createMediaElementSource fails (e.g., already connected), 
-          // just connect audio directly to speakers
-          // This is expected behavior after first connection
+          // If createMediaElementSource fails (e.g., already connected),
+          // the HTML5 audio element will play through its default output automatically
+          // This is expected behavior after first connection attempt
         }
       }
 
