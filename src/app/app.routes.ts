@@ -9,6 +9,6 @@ export const routes: Routes = [
   { path: 'contact', title: 'Contact', loadComponent: () => import('./pages/kokozami/contact/contact').then(m => m.Contact) },
   { path: 'choir', title: 'Choir', loadComponent: () => import('./pages/kokozami/choir/choir').then(m => m.Choir) },
   { path: 'choir/reset', title: 'Choir Reset', loadComponent: () => import('./pages/kokozami/choir/reset/reset').then(m => m.Reset) },
-  { path: 'epk', title: 'EPK', loadComponent: () => import('./pages/epk/epk').then(m => m.Epk) },
+  { path: 'epk', title: 'EPK', loadComponent: () => import('./pages/kokozami/epk/epk').then(m => m.Epk) },
   { path: '**', redirectTo: '' } // Wildcard route for a 404 page can be added here
 ];

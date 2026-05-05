@@ -1,7 +1,7 @@
 <app-header></app-header>
 <app-video src="/assets/images/kokozami/fwd-drum-loop.mp4"></app-video>
 <p>
-    i can't wait to share this music with you, so give these demos a listen ahead of the full release in early 2026
+    i can't wait to share this music with you, so give these demos a listen ahead of the full release
 </p>
 <hr>
 <p>
@@ -11,8 +11,8 @@
 </p>
 <hr>
 <app-song
-  [title]="songs[0].title"
-  [link]="songs[0].link">
+  [title]="trackArchives.title"
+  [link]="trackArchives.link">
 </app-song>
 @if (randomSong) {
   <app-song
@@ -20,4 +20,6 @@
     [link]="randomSong.link">
   </app-song>
 }
+<hr>
+<img src="/assets/images/kokozami/archives-cassette.jpg" alt="cassette album image">
 <app-footer></app-footer>

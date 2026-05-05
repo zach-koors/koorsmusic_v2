@@ -28,19 +28,19 @@ body {
 
 @media (min-width: 90em) {
   body {
-    width: 30%;
+    width: 35%;
   }
 }
 
 @media (min-width: 110em) {
   body {
-    width: 20%;
+    width: 30%;
   }
 }
 
 @media (min-width: 130em) {
   body {
-    width: 15%;
+    width: 25%;
   }
 }
 
@@ -237,4 +237,41 @@ footer {
 .cover-video {
   opacity: 1;
   pointer-events: none;
+}
+
+.epk-container {
+  background: #fff;
+  color: #1a253a;
+}
+.epk-videos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.epk-videos video {
+  width: 100%;
+  margin: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(65,105,161,0.08);
+}
+.epk-bio-email {
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
+  color: #233362;
+}
+.epk-email {
+  margin-top: 1.7rem;
+  text-align: center;
+  margin-bottom: 1.7rem;
+}
+.epk-email a {
+  background: colors.$secondary;
+  color: white;
+  padding: 0.62rem 1.22rem 0.62rem 1.22rem;
+  border-radius: 19px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 4px rgba(48,119,184,0.08);
+  display: inline-block;
 }
