@@ -1,40 +1,89 @@
 <app-header></app-header>
-<div class="epk-container">
-  <img src="../../../../assets/images/kokozami/portrait-wall.jpeg" alt="Portrait 3"/>
-  
-  <div class="epk-bio-email">
-    <p><strong>kokozami</strong> started as a way for me to use drumming and producing as an outlet for thoughts, memories, restlessness and exploration. the music pulls from jazz fusion, post-rock, and electronic influences, but it’s really just me trying to find sounds that feel honest and fit for the moment.</p>
-    <p>when recording these songs, i typically start with improvising on drums until i find something worth while that sticks around, then layer the bass, synths and textures to compliment the drum tracks. often, the new bass and synth parts inspire altered drum parts, triggering a pen-pal-style conversation between the drums and the synths until one cohesive song emerges.</p>
-  </div>
+
+<img src="../../../../assets/images/kokozami/portrait-wall.jpeg" alt="Portrait 3"/>
+
+<div>
+  <p><strong>kokozami</strong> started as a way for me to use drumming and producing as an outlet for thoughts, memories, restlessness and exploration. the music pulls from jazz fusion, post-rock, and electronic influences, but it’s really just me trying to find sounds that feel honest and fit for the moment.</p>
+  <p>when recording these songs, i typically start with improvising on drums until i find something worth while that sticks around, then layer the bass, synths and textures to compliment the drum tracks. often, the new bass and synth parts inspire altered drum parts, triggering a pen-pal-style conversation between the drums and the synths until one cohesive song emerges.</p>
+</div>
 
 <app-song
-  [title]="trackArchives.title"
-  [link]="trackArchives.link">
+[title]="trackArchives.title"
+[link]="trackArchives.link">
 </app-song>
-  @if (randomSong) {
-  <app-song
-    [title]="randomSong.title"
-    [link]="randomSong.link">
-  </app-song>
+
+@if (randomSong) {
+<app-song
+  [title]="randomSong.title"
+  [link]="randomSong.link">
+</app-song>
 }
 
-  <div class="epk-videos">
-    <video controls src="https://www.dropbox.com/scl/fi/iphhq3giaegl4yfhggiea/formalities-handstand.mp4?rlkey=6ho4z7orvvql0j8xlb350nelm&st=4yrnhldq&raw=1"></video>
-  </div>
+<hr>
 
-  <img src="../../../../assets/images/kokozami/archives-cassette.jpg" alt="Cassette Album"/>
-
-  <div class="epk-email">
-    <a href="mailto:kokozami.music@gmail.com">kokozami.music@gmail.com</a>
-  </div>
-  
-  <img src="../../../../assets/images/kokozami/archives-full-cover.jpg" alt="Kokozami Archives full album cover image"/>
-  
-  <img src="../../../../assets/images/kokozami/portrait-seated.jpeg" alt="Portrait 1"/>
-  <img src="../../../../assets/images/kokozami/portrait-arch.jpg" alt="Portrait 2"/>
-  
-  <div class="epk-videos">
-    <video class="epk-videos" controls src="https://www.dropbox.com/scl/fi/giql1jhgxe0vv2p9o7gix/eej-alarm-clock.MP4?rlkey=r9rmeejx6j575f5dnm7cdez3v&st=o8gizl09&raw=1"></video>
-  </div>
+<div class="epk-videos">
+  <video controls src="https://www.dropbox.com/scl/fi/iphhq3giaegl4yfhggiea/formalities-handstand.mp4?rlkey=6ho4z7orvvql0j8xlb350nelm&st=4yrnhldq&raw=1"></video>
 </div>
+
+<hr>
+
+<p>
+  <strong>"archives"</strong> album coming soon, available on cassette, vinyl and bandcamp. release on all streaming platforms to follow.
+</p>
+
+<hr>
+
+<app-video src="/assets/images/kokozami/archives-vinyl-turntable.mp4"></app-video>
+
+<hr>
+
+<img src="/assets/images/kokozami/archives-vinyl-c.jpg" alt="kokozami clear vinyl cover image">
+
+<hr>
+
+<img src="/assets/images/kokozami/archives-vinyl-b.jpg" alt="kokozami black vinyl cover image">
+
+<hr>
+
+<img src="/assets/images/kokozami/archives-cassette.jpg" alt="kokozami cassette album image">
+
+<hr>
+
+<p>
+  <strong>"archives"</strong> music video coming soon
+</p>
+
+<hr>
+
+<img src="/assets/images/kokozami/portrait-arch.jpg" alt="kokozami portrait in front of arch image">
+
+<hr>
+
+<p>
+  <a class="nav-link left-line" href="https://mailchi.mp/ce00dfbf049e/kokozami">
+    join the email list
+  </a>
+</p>
+
+<hr>
+
+<p>
+  <a class="nav-link left-line" href="mailto:kokozami.music@gmail.com">
+    send an email to kokozami
+  </a>
+</p>
+
+<hr>
+
+<img src="../../../../assets/images/kokozami/archives-full-cover.jpg" alt="Kokozami Archives full album cover image"/>
+
+<hr>
+
+<img src="../../../../assets/images/kokozami/portrait-seated.jpeg" alt="Portrait 1"/>
+
+<hr>
+<div class="epk-videos">
+  <video controls src="https://www.dropbox.com/scl/fi/giql1jhgxe0vv2p9o7gix/eej-alarm-clock.MP4?rlkey=r9rmeejx6j575f5dnm7cdez3v&st=o8gizl09&raw=1"></video>
+</div>
+
 <app-footer></app-footer>

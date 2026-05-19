@@ -3,11 +3,12 @@ import { Header } from '../../../components/header/header';
 import { Footer } from '../../../components/footer/footer';
 import { pickRandomSong, TRACK_ARCHIVES } from '../../../config/archives_songs';
 import { Song } from '../../../components/song/song';
+import { Video } from '../../../components/video/video';
 
 @Component({
   selector: 'app-epk',
   templateUrl: './epk.html',
-  imports: [Header, Footer, Song],
+  imports: [Header, Footer, Song, Video],
   styleUrls: ['./epk.scss'],
 })
 export class Epk {

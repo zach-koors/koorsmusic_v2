@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Footer } from '../../../components/footer/footer';
 import { Header } from '../../../components/header/header';
+import { Video } from '../../../components/video/video';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
-  imports: [Header, Footer]
+  imports: [Header, Footer, Video]
 })
 export class Home {
   isVideoPlaying = false;
