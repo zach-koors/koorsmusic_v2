@@ -8,14 +8,12 @@ import { Component, Input } from '@angular/core';
 })
 export class Video {
   @Input() src: string = '';  
-  pause() {
-    const videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-      if (!video.paused) {
-        video.pause();
-      } else {
-        video.play();
-      }
-    });
+  pause(event: Event): void {
+    const video = event.currentTarget as HTMLVideoElement;
+    if (!video.paused) {
+          video.pause();
+        } else {
+          video.play();
+        };
   }
 }

@@ -1,25 +1,15 @@
 <app-header></app-header>
 <app-video src="/assets/images/kokozami/fwd-drum-loop.mp4"></app-video>
-<p>
-    i can't wait to share this music with you, so give these demos a listen ahead of the full release
-</p>
 <hr>
 <p>
-    <a class="nav-link left-line" href="https://mailchi.mp/ce00dfbf049e/kokozami">
-      join the email list
-    </a>
+    "archives" album out now!"
 </p>
 <hr>
-<app-song
-  [title]="trackArchives.title"
-  [link]="trackArchives.link">
-</app-song>
-@if (randomSong) {
-  <app-song
-    [title]="randomSong.title"
-    [link]="randomSong.link">
-  </app-song>
-}
+<iframe style="border: 0; width: 100%; aspect-ratio: 1/1.75;" src="https://bandcamp.com/EmbeddedPlayer/album=3704066040/size=large/bgcol=ffffff/linkcol=0687f5/transparent=true/" seamless><a href="https://kokozami.bandcamp.com/album/archives">Archives by Kokozami</a></iframe>
 <hr>
-<img src="/assets/images/kokozami/archives-cassette.jpg" alt="cassette album image">
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/4LcwpyOVfX6cABgiU1FkBC?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<hr>
+<p>
+  <a class="left-line" href="https://music.apple.com/us/artist/kokozami/6779308622">listen on apple music &#x2197;</a> 
+</p>
 <app-footer></app-footer>
